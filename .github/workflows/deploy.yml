@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npm install -g hexo-cli
+          npm install hexo-cli
 
       - name: Fetch GitHub Trending
         run: node scripts/fetch-trending.js
@@ -45,7 +45,8 @@ jobs:
 
       - name: Build Hexo site and add CNAME
         run: |
-          hexo generate
+          ls -la node_modules/.bin/ | grep hexo
+          ./node_modules/.bin/hexo generate
           echo 'th1ry.uk' > ./public/CNAME
           ls -la ./public
 
