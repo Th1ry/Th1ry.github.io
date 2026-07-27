@@ -45,8 +45,16 @@ jobs:
 
       - name: Build Hexo site and add CNAME
         run: |
+          echo "=== source/_posts ==="
+          ls -la source/_posts/ || echo "source/_posts not found"
+          echo "=== theme installed ==="
+          ls -la node_modules/hexo-theme-landscape/ 2>/dev/null || echo "theme NOT installed"
+          echo "=== hexo version ==="
+          node -e "console.log(require('hexo/package.json').version)"
+          echo "=== build ==="
           node scripts/build-site.js
           echo 'th1ry.uk' > ./public/CNAME
+          echo "=== public ==="
           ls -la ./public
 
       - name: Upload artifact
