@@ -45,8 +45,7 @@ jobs:
 
       - name: Build Hexo site and add CNAME
         run: |
-          ls -la node_modules/.bin/ | grep hexo
-          ./node_modules/.bin/hexo generate
+          ./node_modules/hexo-cli/bin/hexo generate
           echo 'th1ry.uk' > ./public/CNAME
           ls -la ./public
 
