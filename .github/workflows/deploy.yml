@@ -1,0 +1,64 @@
+name: Auto Blog Deploy
+
+on:
+  schedule:
+    # 每天早上9点自动运行（UTC 1:00 = 北京时间 9:00）
+    - cron: '0 1 * * *'
+  workflow_dispatch:  # 手动触发
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Fetch GitHub Trending
+        run: node scripts/fetch-trending.js
+
+      - name: Generate Articles
+        run: node scripts/generate-article.js
+
+      - name: Create New Post
+        run: node scripts/create-post.js
+
+      - name: Build Hexo site and add CNAME
+        run: |
+          npx hexo generate
+          echo 'th1ry.uk' > ./public/CNAME
+          ls -la ./public
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

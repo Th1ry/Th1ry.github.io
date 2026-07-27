@@ -1,0 +1,17 @@
+{
+  "name": "th1ry-blog",
+  "version": "1.0.0",
+  "description": "Th1ry's GitHub Trending Blog - Auto Updated",
+  "main": "index.js",
+  "scripts": {
+    "start": "node scripts/create-post.js",
+    "build": "hexo generate",
+    "deploy": "hexo deploy",
+    "server": "hexo server"
+  },
+  "dependencies": {
+    "hexo": "^7.1.0",
+    "hexo-theme-landscape": "^1.0.0",
+    "hexo-deployer-git": "^4.0.0"
+  }
+}
