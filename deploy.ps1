@@ -154,11 +154,19 @@ if ($remotes -notcontains "origin") {
     git remote add origin "https://github.com/$fullRepo.git"
 }
 
+# If remote is SSH, make sure HTTPS fallback is not used by git commands inside script
 git branch -M main
-git push -u origin main
+
+# Try push, if it fails due to unrelated histories, force push
+$pushOutput = git push -u origin main 2>&1
 if ($LASTEXITCODE -ne 0) {
-    Write-Err "Push failed"
-    exit 1
+    Write-Warn "Normal push failed: $pushOutput"
+    Write-Warn "Trying force push..."
+    git push -u origin main --force
+    if ($LASTEXITCODE -ne 0) {
+        Write-Err "Push failed"
+        exit 1
+    }
 }
 Write-Ok "Code pushed to GitHub"
 
