@@ -30,7 +30,9 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install -g hexo-cli
 
       - name: Fetch GitHub Trending
         run: node scripts/fetch-trending.js
@@ -43,7 +45,7 @@ jobs:
 
       - name: Build Hexo site and add CNAME
         run: |
-          npx hexo generate
+          hexo generate
           echo 'th1ry.uk' > ./public/CNAME
           ls -la ./public
 
