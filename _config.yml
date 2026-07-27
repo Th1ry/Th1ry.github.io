@@ -48,6 +48,9 @@ prismjs:
   line_number: true
   tab_replace: ''
 
+# Theme
+theme: landscape
+
 # Category & Tag
 default_category: uncategorized
 category_map:
